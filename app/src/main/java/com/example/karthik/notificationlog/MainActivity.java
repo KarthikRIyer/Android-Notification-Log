@@ -17,6 +17,8 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,11 +26,15 @@ public class MainActivity extends AppCompatActivity {
     NotificationReceiver nReceiver;
     RecyclerView recyclerView;
     DataListAdapter dataListAdapter;
-    List<NotificationDataList> dataList;
+    List<LogObject> dataList;
+    Realm realm;
+    ///////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        realm = Realm.getDefaultInstance();
 
         dataList = new ArrayList<>();
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
@@ -44,27 +50,40 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("com.example.karthik.notificationlog.NOTIFICATION_LOG");
         registerReceiver(nReceiver,filter);
         startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
-    }
 
+        updateList();
+
+
+    }
+    /////////////////////////////////////////////////////
     @Override
     protected void onDestroy(){
         super.onDestroy();
         unregisterReceiver(nReceiver);
+        realm.close();
     }
-
+    ///////////////BROADCAST RECEIVER/////////////////////
     public class NotificationReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent){
-            String packageText = intent.getStringExtra("packageText");
-            String titleText = intent.getStringExtra("title");
-            String tickerText = intent.getStringExtra("ticker");
-            String textText = intent.getStringExtra("text");
-            NotificationDataList notificationDataList = new NotificationDataList(titleText,packageText,tickerText,textText);
-            dataList.add(notificationDataList);
-            dataListAdapter.notifyDataSetChanged();
+            updateList();
         }
 
     }
+    /////////////////////UPDATE LIST///////////////////////
+    public void updateList(){
+
+        RealmResults<LogObject> LogResults = realm.where(LogObject.class).findAll();
+        realm.beginTransaction();
+        dataList.clear();
+        for(LogObject logObject: LogResults){
+            dataList.add(logObject);
+        }
+        realm.commitTransaction();
+
+        dataListAdapter.notifyDataSetChanged();
+    }
+    ///////////////////////////////////////////////////////
 }
 

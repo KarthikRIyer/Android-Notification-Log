@@ -1,24 +1,17 @@
 package com.example.karthik.notificationlog;
 
+import io.realm.RealmObject;
+
 /**
- * Created by karthik on 30/5/18.
+ * Created by karthik on 1/6/18.
  */
 
-public class NotificationDataList {
+public class LogObject extends RealmObject {
 
     private String title,tickerText,packageText,text;
 
-    public NotificationDataList(){}
-
-    public NotificationDataList(String title,String packageText,String tickerText,String text){
-        this.text = text;
-        this.packageText = packageText;
-        this.tickerText = tickerText;
-        this.title = title;
-    }
-
     public void setPackageText(String packageText){
-            this.packageText = packageText;
+        this.packageText = packageText;
     }
     public void setTitleText(String title){
         this.title = title;

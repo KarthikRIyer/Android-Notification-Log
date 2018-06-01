@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.MyViewHolder>{
 
-    private List<NotificationDataList> dataList;
+    private List<LogObject> dataList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
@@ -30,7 +30,7 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.MyView
 
     }
 
-    public DataListAdapter(List<NotificationDataList> dataList){
+    public DataListAdapter(List<LogObject> dataList){
         this.dataList = dataList;
     }
 
@@ -42,11 +42,11 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder,int position){
-        NotificationDataList notifiationList = dataList.get(position);
-        holder.textText.setText(notifiationList.getTextText());
-        holder.titleText.setText(notifiationList.getTitleText());
-        holder.tickText.setText(notifiationList.getTickerText());
-        holder.packText.setText(notifiationList.getPackageText());
+        LogObject notificationList = dataList.get(position);
+        holder.textText.setText(notificationList.getTextText());
+        holder.titleText.setText(notificationList.getTitleText());
+        holder.tickText.setText(notificationList.getTickerText());
+        holder.packText.setText(notificationList.getPackageText());
     }
 
     @Override
